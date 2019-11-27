@@ -12,11 +12,13 @@ dataset = pd.read_csv("19.06.20_travels_Frankfurt.csv")
 
 dataset = dataset.loc[:, ['TIN', 'TIR', 'TIM', 'TIRE', 'TIT', 'TAc']]
 
+#Analyse der verspäteten Züge für die ersten 100 Zeilen
 #löscht Zeilen mit nan-Werten
 dataset = dataset.dropna()
 
 X = dataset.iloc[0:100, 0:1].values
 y = dataset.iloc[0:100, 5:6].values
+
 
 xx = X.ravel()
 yy = y.ravel()
@@ -26,4 +28,3 @@ plt.xticks(rotation='vertical')
 #plt.savefig("test.png")
 plt.show()
 
-print(dataset[0:1:1])

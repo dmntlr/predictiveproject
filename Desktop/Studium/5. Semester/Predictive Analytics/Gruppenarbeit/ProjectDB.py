@@ -22,3 +22,20 @@ TAC = data["TAc"]
 #Ausgabe jeder Zeile für eine Spalte
 with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
     print(TA)
+
+
+#Analyse der verspäteten Züge für die ersten 100 Zeilen
+#löscht Zeilen mit nan-Werten
+dataset = data.dropna()
+
+X = dataset.iloc[0:100, 2:3].values
+y = dataset.iloc[0:100, 12:13].values
+
+
+xx = X.ravel()
+yy = y.ravel()
+
+plt.bar(xx, yy, color='red')
+plt.xticks(rotation='vertical')
+#plt.savefig("test.png")
+plt.show()
