@@ -21,4 +21,4 @@ TAC = data["TAc"]
 
 #Ausgabe jeder Zeile für eine Spalte
 with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-    print(TAA)
+    print(TA)
