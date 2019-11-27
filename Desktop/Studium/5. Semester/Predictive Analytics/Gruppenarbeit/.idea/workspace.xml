@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fd47b408-1ef4-4178-860a-1c420863f1df" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectDB.py" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectDB.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/~$formationen.docx" beforeDir="false" afterPath="$PROJECT_DIR$/~$formationen.docx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Project_DBFrankfurt.py" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -147,7 +145,7 @@
       <option name="presentableId" value="Default" />
       <updated>1574858471379</updated>
       <workItem from="1574858473890" duration="1201000" />
-      <workItem from="1574861571885" duration="10265000" />
+      <workItem from="1574861571885" duration="10529000" />
     </task>
     <task id="LOCAL-00001" summary="neuste">
       <created>1574863384747</created>
@@ -163,7 +161,14 @@
       <option name="project" value="LOCAL" />
       <updated>1574865892977</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Züge sortiert nach verpätung">
+      <created>1574872987084</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1574872987084</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -183,7 +188,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="neuste" />
     <MESSAGE value="Pascal und Daniel zusammengeführt" />
-    <option name="LAST_COMMIT_MESSAGE" value="Pascal und Daniel zusammengeführt" />
+    <MESSAGE value="Züge sortiert nach verpätung" />
+    <option name="LAST_COMMIT_MESSAGE" value="Züge sortiert nach verpätung" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/Gruppenarbeit$Project_DBFrankfurt.coverage" NAME="Project_DBFrankfurt Coverage Results" MODIFIED="1574867837120" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
