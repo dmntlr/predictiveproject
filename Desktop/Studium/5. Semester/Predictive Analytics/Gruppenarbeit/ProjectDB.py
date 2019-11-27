@@ -22,25 +22,24 @@ TAC = data["TAc"]
 
 #Ausgabe jeder Zeile für eine Spalte
 with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-      print(TAC)
+      print(TIN)
 
 
 
-#Analyse der verspäteten Züge für die ersten 100 Zeilen
 #löscht Zeilen mit nan-Werten
 dataset = data.dropna()
-#Sortieren nach verspätung
+#Alle negativen Zahlen entfernen damit zu frühe abfahrtzeiten nicht gezählt werden
+dataset = dataset[(dataset.iloc[:,12:13] > 0).all(1)]
+#Groupiert nach Zügen und summiert dabei die Zeiten auf
+dataset = dataset.groupby('TIN').agg({'TAc' : 'sum'}).reset_index()
+#Sortiert nach Zeiten
 dataset = dataset.sort_values(by=['TAc'], ascending=False)
 
-X = dataset.iloc[:, 2:3].values.ravel()
-y = dataset.iloc[:, 12:13].values.ravel()
 
-
-#Daten bereinigen da auch hohe negative Zahlen als Fehlzeiten drinne sind Da für TAC ja TA - TIT gerechnet wird
-y = [0 if x<0 else x for x in y]
+X = dataset.iloc[:, 0:1].values.ravel()
+y = dataset.iloc[:, 1:2].values.ravel()
 
 plt.figure(figsize=(40, 4))
 plt.bar(X,y)
 plt.xticks(rotation='vertical')
-
 plt.show()
