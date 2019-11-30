@@ -6,7 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 #CSV Datei lesen, es wird beim Komma in eine neue Spalte aufgeteilt
-missing_values = ["na", "", " Es verkehrt"]
+missing_values = ["na", "", "Es verkehrt"]
 data = pd.read_csv("19.06.20_travels_Frankfurt.csv",sep=',', na_values=missing_values)
 
 #Zugriff auf jede Spalte
@@ -57,12 +57,20 @@ data1 = dataset.loc[:, ['TIN', 'TAc', 'TIT']]
 #binäre Spalte 'LATE' (1=Verspätung, 0=keine Verspätung)
 late = []
 cntlate = 0
+cntintime = 0
 for row in data1['TAc']:
       if row > 1:
          late.append(1)
          cntlate+=1
       else:
          late.append(0)
+         cntintime += 1
+
+
+print("Es gibt " + cntlate.__str__() + " Züge die eine Verspätung haben.")
+
+print("Es gibt " + cntintime.__str__() + " Züge die pünktlich sind.")
+
 
 data1['LATE'] = late
 #nach Uhrzeiten sortiert
@@ -85,8 +93,6 @@ log_reg = LogisticRegression()
 log_reg.fit(X_train_scaled, Y_train)
 y_pred = log_reg.predict(X_test_scaled)
 
-print("Es gibt " + cntlate.__str__() + " Züge die eine Verspätung haben.")
-
 #plt.figure(figsize=(50, 5))
 plt.scatter(X_train, Y_train, color='red', label='Training data')
 plt.xlabel('Uhrzeit')
@@ -103,5 +109,4 @@ plt.xlabel('Uhrzeit')
 plt.ylabel('Verspätung (Ja/Nein)')
 plt.plot(X_train, y_pred_proba, color='green', linewidth=3, label='Log Reg')
 plt.legend()
-plt.show()
 plt.show()
