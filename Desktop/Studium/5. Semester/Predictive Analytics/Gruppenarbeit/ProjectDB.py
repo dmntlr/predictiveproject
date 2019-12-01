@@ -5,6 +5,8 @@ import numpy as np
 from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
+import re
+
 #CSV Datei lesen, es wird beim Komma in eine neue Spalte aufgeteilt
 missing_values = ["na", "", "Es verkehrt"]
 data = pd.read_csv("19.06.20_travels_Frankfurt.csv",sep=',', na_values=missing_values)
@@ -24,23 +26,30 @@ TID = data["TID"]
 TSC = data["TSC"]
 TAC = data["TAc"]
 
-#Ausgabe jeder Zeile für eine Spalte
-#with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-     # print(TIN)
+
 
 
 
 #löscht Zeilen mit nan-Werten
 dataset = data.dropna()
+
 #Alle negativen Zahlen entfernen damit zu frühe abfahrtzeiten nicht gezählt werden
-#Alle positiven Zahlen in einen neuen Datensatz hinzufügen, damit die negativen nicht gezählt werden.
 dataset = dataset[(dataset.iloc[:, 12:13] > 0).all(1)]
+
+#Finden von Klammern und Inhalt löschen damit Modelle richtig gruppiert werden
+dataset['TIN'] =  [re.sub(r'\([^)]*\)','', str(x)) for x in dataset['TIN']]
+
+#Ausgabe jeder Zeile für eine Spalte
+#with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+#    print(TIN)
+
 #Groupiert nach Zügen und summiert dabei die Zeiten auf
 data2 = dataset.groupby('TIN').agg({'TAc' : 'sum'}).reset_index()
+
 #Sortiert nach Zeiten
 data2 = data2.sort_values(by=['TAc'], ascending=False)
 
-
+#X und Y in ganzer liste speichern
 X = data2.iloc[:, 0:1].values.ravel()
 y = data2.iloc[:, 1:2].values.ravel()
 
@@ -52,6 +61,7 @@ plt.show()
 #Wahrscheinlichkeit, dass ein bestimmter Zug zu spät kommt
 
 data1 = dataset.loc[:, ['TIN', 'TAc', 'TIT']]
+data1['TIN'] =  [re.sub(r'\([^)]*\)','', str(x)) for x in dataset['TIN']]
 #data1['TAc'] = [0 if x < 0 else x for x in y]
 
 #binäre Spalte 'LATE' (1=Verspätung, 0=keine Verspätung)
