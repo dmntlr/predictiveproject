@@ -8,6 +8,8 @@ from sklearn.linear_model import LogisticRegression
 import re
 from sklearn.preprocessing import PolynomialFeatures
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import confusion_matrix
+
 
 
 #CSV Datei lesen, es wird beim Komma in eine neue Spalte aufgeteilt
@@ -120,6 +122,16 @@ plt.ylabel('Verspätung (Ja/Nein)')
 plt.plot(X_train, y_pred_proba, color='green', linewidth=3, label='Log Reg')
 plt.legend()
 plt.show()
+
+cm = confusion_matrix(Y_test, y_pred)
+print("Confusion Matrix: " + str(cm))
+sens = str(cm[1, 1]/(cm[1, 1] + cm[1, 0]))
+print("Sensitivity: " + str(cm[1, 1]/(cm[1, 1] + cm[1, 0])))
+spec = str(cm[0, 0]/(cm[0, 0] + cm[0, 1]))
+print("Specificity: " + str(cm[0, 0]/(cm[0, 0] + cm[0, 1])))
+print("Precision: " + str(cm[1, 1]/(cm[1, 1] + cm[0, 1])))
+print("Accuracy: " + str((cm[0, 0]+cm[1, 1])/(cm[0, 0] + cm[0, 1] + cm[1, 0] + cm[1, 1])))
+
 
 #Vorher splitten weil ja nach datum sortiert werden muss
 train, test = train_test_split(data, test_size=0.2)
