@@ -165,5 +165,5 @@ plt.show()
 
 #Vorhersage für Test daten
 
-for uhrzeit, erg in zip(np.nditer(X_test), np.nditer(y_test)):
-    print("Versuche für Uhrzeit ",uhrzeit, "vorherzugagen->",lin2.predict(poly.fit_transform([[uhrzeit]])), "eigentliches Ergebniss ist" , erg)
+#for uhrzeit, erg in zip(np.nditer(X_test), np.nditer(y_test)):
+    #print("Versuche für Uhrzeit ",uhrzeit, "vorherzugagen->",lin2.predict(poly.fit_transform([[uhrzeit]])), "eigentliches Ergebniss ist" , erg)
