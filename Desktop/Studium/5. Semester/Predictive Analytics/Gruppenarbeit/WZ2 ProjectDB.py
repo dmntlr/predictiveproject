@@ -44,8 +44,7 @@ data = data[(data.iloc[:, 12:13] > 0).all(1)]
 data['TIN'] = [re.sub(r'\([^)]*\)','', str(x)) for x in data['TIN']]
 
 
-
-#Groupiert nach Zügen und summiert dabei die Zeiten auf
+#Gruppiert nach Zügen und summiert dabei die Verspätung auf
 data2 = data.groupby('TIN').agg({'TAc' : 'sum'}).reset_index()
 
 #Sortiert nach Zeiten
@@ -139,14 +138,17 @@ train, test = train_test_split(data, test_size=0.2)
 train = train.sort_values(by=['TIT'])
 test = test.sort_values(by=['TIT'])
 
+#Trainingsdaten
 X_train = train['TIT'].str.replace(':', '').astype(int)
 X_train= X_train.values.reshape(-1,1)
 y_train = train['TAc']
 
+#Testdaten
 X_test = test['TIT'].str.replace(':', '').astype(int)
 X_test= X_test.values.reshape(-1,1)
 y_test = test['TAc']
 
+#Varianz und Standardabweichung und auf die Trainingsdaten standardisieren. Formel ist ähnlich wie für die Multiple Regression
 poly = PolynomialFeatures(degree = 4)
 X_poly = poly.fit_transform(X_train)
 
@@ -154,7 +156,7 @@ poly.fit(X_poly, y_train)
 lin2 = LinearRegression()
 lin2.fit(X_poly, y_train)
 
-
+#Trainingsdaten Plotten
 plt.scatter(X_train, y_train, color = 'blue')
 plt.plot(X_train, lin2.predict(X_poly), color = 'red')
 plt.title('Polynomial Regression')
@@ -163,7 +165,6 @@ plt.ylabel('Verspätung')
 
 plt.show()
 
-#Vorhersage für Test daten
-
-#for uhrzeit, erg in zip(np.nditer(X_test), np.nditer(y_test)):
-    #print("Versuche für Uhrzeit ",uhrzeit, "vorherzugagen->",lin2.predict(poly.fit_transform([[uhrzeit]])), "eigentliches Ergebniss ist" , erg)
+#Vorhersage für Test daten treffen
+for uhrzeit, erg in zip(np.nditer(X_test), np.nditer(y_test)):
+    print("Versuche für Uhrzeit ",uhrzeit, "vorherzugagen->",lin2.predict(poly.fit_transform([[uhrzeit]])), "eigentliches Ergebniss ist" , erg)
