@@ -6,10 +6,18 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 import re
+from sklearn.preprocessing import PolynomialFeatures
+from sklearn.linear_model import LinearRegression
+
 
 #CSV Datei lesen, es wird beim Komma in eine neue Spalte aufgeteilt
-missing_values = ["na", "", "Es verkehrt"]
+missing_values = ["na", "", " Es verkehrt"]
 data = pd.read_csv("19.06.20_travels_Frankfurt.csv",sep=',', na_values=missing_values)
+
+
+#löscht Zeilen mit nan-Werten
+data = data.dropna()
+
 
 #Zugriff auf jede Spalte
 TAA = data["TAA"]
@@ -26,21 +34,17 @@ TID = data["TID"]
 TSC = data["TSC"]
 TAC = data["TAc"]
 
-#löscht Zeilen mit nan-Werten
-dataset = data.dropna()
 
 #Alle negativen Zahlen entfernen damit zu frühe abfahrtzeiten nicht gezählt werden
-dataset = dataset[(dataset.iloc[:, 12:13] > 0).all(1)]
+data = data[(data.iloc[:, 12:13] > 0).all(1)]
 
 #Finden von Klammern und Inhalt löschen damit Modelle richtig gruppiert werden
-dataset['TIN'] = [re.sub(r'\([^)]*\)','', str(x)) for x in dataset['TIN']]
+data['TIN'] = [re.sub(r'\([^)]*\)','', str(x)) for x in data['TIN']]
 
-#Ausgabe jeder Zeile für eine Spalte
-#with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-#    print(TIN)
+
 
 #Groupiert nach Zügen und summiert dabei die Zeiten auf
-data2 = dataset.groupby('TIN').agg({'TAc' : 'sum'}).reset_index()
+data2 = data.groupby('TIN').agg({'TAc' : 'sum'}).reset_index()
 
 #Sortiert nach Zeiten
 data2 = data2.sort_values(by=['TAc'], ascending=False)
@@ -56,7 +60,7 @@ plt.show()
 
 #Wahrscheinlichkeit, dass ein bestimmter Zug zu spät kommt
 
-data1 = dataset.loc[:, ['TIN', 'TAc', 'TIT']]
+data1 = data.loc[:, ['TIN', 'TAc', 'TIT']]
 
 #data1['TAc'] = [0 if x < 0 else x for x in y]
 
@@ -117,4 +121,36 @@ plt.plot(X_train, y_pred_proba, color='green', linewidth=3, label='Log Reg')
 plt.legend()
 plt.show()
 
+
+
+#Plot Uhrzeiten mit Verspätungen
+data3 = data.loc[:, ['TIN', 'TAc', 'TIT']]
+
+#Ausgabe jeder Zeile für eine Spalte
+#with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
+#    print(data3)
+#nach Uhrzeiten sortiert
+data3 = data3.sort_values(by=['TIT'])
+#Uhrzeiten für Logistische Regression in Integer umgewandelt
+#Beispiel: 11:00 Uhr = 1100; 12:30 Uhr = 1230
+
+X = data['TIT'].str.replace(':', '').astype(int)
+X = X.values.reshape(-1,1)
+y = data['TAc']
+
+poly = PolynomialFeatures(degree = 3)
+X_poly = poly.fit_transform(X)
+
+poly.fit(X_poly, y)
+lin2 = LinearRegression()
+lin2.fit(X_poly, y)
+
+
+plt.scatter(X, y, color = 'blue')
+plt.plot(X, lin2.predict(poly.fit_transform(X)), color = 'red')
+plt.title('Polynomial Regression')
+plt.xlabel('Uhrzeit')
+plt.ylabel('Verspätung')
+
+plt.show()
 
