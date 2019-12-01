@@ -124,7 +124,8 @@ plt.show()
 #Vorher splitten weil ja nach datum sortiert werden muss
 train, test = train_test_split(data, test_size=0.2)
 #nach Uhrzeiten sortiert
-train = data.sort_values(by=['TIT'])
+train = train.sort_values(by=['TIT'])
+test = test.sort_values(by=['TIT'])
 
 X_train = train['TIT'].str.replace(':', '').astype(int)
 X_train= X_train.values.reshape(-1,1)
@@ -143,7 +144,7 @@ lin2.fit(X_poly, y_train)
 
 
 plt.scatter(X_train, y_train, color = 'blue')
-plt.plot(X_train, lin2.predict(poly.fit_transform(X_train)), color = 'red')
+plt.plot(X_train, lin2.predict(X_poly), color = 'red')
 plt.title('Polynomial Regression')
 plt.xlabel('Uhrzeit')
 plt.ylabel('Verspätung')
