@@ -121,18 +121,18 @@ plt.plot(X_train, y_pred_proba, color='green', linewidth=3, label='Log Reg')
 plt.legend()
 plt.show()
 
-
-
+#Vorher splitten weil ja nach datum sortiert werden muss
+train, test = train_test_split(data, test_size=0.2)
 #nach Uhrzeiten sortiert
-data3 = data.sort_values(by=['TIT'])
+train = data.sort_values(by=['TIT'])
 
-X = data3['TIT'].str.replace(':', '').astype(int)
-X = X.values.reshape(-1,1)
-y = data3['TAc']
+X_train = train['TIT'].str.replace(':', '').astype(int)
+X_train= X_train.values.reshape(-1,1)
+y_train = train['TAc']
 
-#Daten Splitten
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
-
+X_test = test['TIT'].str.replace(':', '').astype(int)
+X_test= X_test.values.reshape(-1,1)
+y_test = test['TAc']
 
 poly = PolynomialFeatures(degree = 4)
 X_poly = poly.fit_transform(X_train)
@@ -142,11 +142,15 @@ lin2 = LinearRegression()
 lin2.fit(X_poly, y_train)
 
 
-plt.scatter(X, y, color = 'blue')
-plt.plot(X, lin2.predict(poly.fit_transform(X)), color = 'red')
+plt.scatter(X_train, y_train, color = 'blue')
+plt.plot(X_train, lin2.predict(poly.fit_transform(X_train)), color = 'red')
 plt.title('Polynomial Regression')
 plt.xlabel('Uhrzeit')
 plt.ylabel('Verspätung')
 
 plt.show()
 
+#Vorhersage für Test daten
+
+for uhrzeit, erg in zip(np.nditer(X_test), np.nditer(y_test)):
+    print("Versuche für Uhrzeit ",uhrzeit, "vorherzugagen->",lin2.predict(poly.fit_transform([[uhrzeit]])), "eigentliches Ergebniss ist" , erg)
