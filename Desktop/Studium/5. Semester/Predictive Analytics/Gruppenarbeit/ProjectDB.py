@@ -26,10 +26,6 @@ TID = data["TID"]
 TSC = data["TSC"]
 TAC = data["TAc"]
 
-
-
-
-
 #löscht Zeilen mit nan-Werten
 dataset = data.dropna()
 
@@ -37,7 +33,7 @@ dataset = data.dropna()
 dataset = dataset[(dataset.iloc[:, 12:13] > 0).all(1)]
 
 #Finden von Klammern und Inhalt löschen damit Modelle richtig gruppiert werden
-dataset['TIN'] =  [re.sub(r'\([^)]*\)','', str(x)) for x in dataset['TIN']]
+dataset['TIN'] = [re.sub(r'\([^)]*\)','', str(x)) for x in dataset['TIN']]
 
 #Ausgabe jeder Zeile für eine Spalte
 #with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
@@ -61,7 +57,7 @@ plt.show()
 #Wahrscheinlichkeit, dass ein bestimmter Zug zu spät kommt
 
 data1 = dataset.loc[:, ['TIN', 'TAc', 'TIT']]
-data1['TIN'] =  [re.sub(r'\([^)]*\)','', str(x)) for x in dataset['TIN']]
+
 #data1['TAc'] = [0 if x < 0 else x for x in y]
 
 #binäre Spalte 'LATE' (1=Verspätung, 0=keine Verspätung)
@@ -120,3 +116,5 @@ plt.ylabel('Verspätung (Ja/Nein)')
 plt.plot(X_train, y_pred_proba, color='green', linewidth=3, label='Log Reg')
 plt.legend()
 plt.show()
+
+
