@@ -123,27 +123,23 @@ plt.show()
 
 
 
-#Plot Uhrzeiten mit Verspätungen
-data3 = data.loc[:, ['TIN', 'TAc', 'TIT']]
-
-#Ausgabe jeder Zeile für eine Spalte
-#with pd.option_context('display.max_rows', None, 'display.max_columns', None):  # more options can be specified also
-#    print(data3)
 #nach Uhrzeiten sortiert
-data3 = data3.sort_values(by=['TIT'])
-#Uhrzeiten für Logistische Regression in Integer umgewandelt
-#Beispiel: 11:00 Uhr = 1100; 12:30 Uhr = 1230
+data3 = data.sort_values(by=['TIT'])
 
-X = data['TIT'].str.replace(':', '').astype(int)
+X = data3['TIT'].str.replace(':', '').astype(int)
 X = X.values.reshape(-1,1)
-y = data['TAc']
+y = data3['TAc']
 
-poly = PolynomialFeatures(degree = 3)
-X_poly = poly.fit_transform(X)
+#Daten Splitten
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
-poly.fit(X_poly, y)
+
+poly = PolynomialFeatures(degree = 4)
+X_poly = poly.fit_transform(X_train)
+
+poly.fit(X_poly, y_train)
 lin2 = LinearRegression()
-lin2.fit(X_poly, y)
+lin2.fit(X_poly, y_train)
 
 
 plt.scatter(X, y, color = 'blue')
